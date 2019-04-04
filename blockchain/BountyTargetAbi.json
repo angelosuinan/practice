@@ -1,0 +1,35 @@
+[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "url",
+				"type": "string"
+			}
+		],
+		"name": "createBounty",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "nonpayable"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "data",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "view"
+	}
+]
