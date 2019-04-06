@@ -79,7 +79,7 @@ class Bifrost {
   static stellarCallback(callbackData) {
     const { from, amount, memo } = callbackData
 
-    if (type) {
+    if (callbackData.type) {
       const { asset_code, asset_issuer } = callbackData
       return {
         amount,
