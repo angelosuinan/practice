@@ -5,6 +5,10 @@
       {
         "name": "url",
         "type": "string"
+      },
+      {
+        "name": "metadata",
+        "type": "string"
       }
     ],
     "name": "createBounty",

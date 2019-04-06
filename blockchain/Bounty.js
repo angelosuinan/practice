@@ -7,13 +7,13 @@ const InputDataDecoder = require('ethereum-input-data-decoder')
 const BountyAbi = require('./BountyAbi.json')
 const BountyTargetAbi = require('./BountyTargetAbi.json')
 
-const CREATE_BOUNTY = 'createBounty(string)'
+const CREATE_BOUNTY = 'createBounty(string,string)'
 const ASSIGN_REWARD = 'assignReward(string)'
 const REWARD = 'reward(address)'
 const CUSTODIAN_KEY =
   '7D8D774540919154180925AAD388D1F12351C8D84A4C52A66D9B2C24111B8E0D'
 const CUSTODIAN_ADDRESS = '0x576e62D095692B1b635B458869eaAAf3ab6FC033'
-const BOUNTY_TARGET_ADDRESS = '0x204fcdd05d292abefe5a35530dac527d9f0e49c8'
+const BOUNTY_TARGET_ADDRESS = '0x07bAeab5E3056BeEa9679E304A175Fd62b814196'
 const GAS_LIMIT = 500000
 const CHAIN_ID = 3
 const BountyDecoder = new InputDataDecoder(BountyAbi)
@@ -64,11 +64,17 @@ class Bounty {
    * @async
    * @static
    * @param {String} url
+   * @param {String} metadata
    * @returns {Promise<String>}
    */
-  static async create(url) {
+  static async create(url, metadata) {
     isTruthy(url, 'url', 'Bounty.create')
-    const encoded = abi.simpleEncode(CREATE_BOUNTY, url).toString('hex')
+    isTruthy(metadata, 'metadata', 'Bounty.create')
+
+    const encoded = abi
+      .simpleEncode(CREATE_BOUNTY, url, metadata)
+      .toString('hex')
+
     const nonce = await this.provider.getTransactionCount(
       CUSTODIAN_ADDRESS,
       'pending'
@@ -153,6 +159,28 @@ class Bounty {
     const username = await contract.username()
 
     return username
+  }
+
+  /**
+   * Query a Bounty contract and returns its metadata
+   *
+   * @method metadata
+   * @async
+   * @static
+   * @param {Promise<String>} url
+   */
+  static async metadata(url) {
+    isTruthy(url, 'url', 'Bounty.metada')
+
+    const contractAddress = await this.address(url)
+    const contract = new ethers.Contract(
+      contractAddress,
+      BountyAbi,
+      this.provider
+    )
+    const metadata = await contract.metadata()
+
+    return metadata
   }
 
   /**
