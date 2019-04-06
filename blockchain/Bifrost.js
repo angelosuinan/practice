@@ -84,8 +84,8 @@ class Bifrost {
       return {
         amount,
         from,
-        asset_code,
-        asset_issuer,
+        assetCode: asset_code,
+        assetIssuer: asset_issuer,
         url: memo
       }
     }
