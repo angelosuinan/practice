@@ -7,6 +7,7 @@ const sourceKeypair = StellarSdk.Keypair.fromSecret(
   'SCWZJFZJZIEVWHPYB4CCOT5RVJ62N6ZV4S2Z3LNWTVAG54DOJ3WPC75X'
 )
 const sourcePublicKey = sourceKeypair.publicKey()
+const SENT_KEYWORD = 'SENT'
 
 /**
  * This module interfaces with Stellar Asset bounties
@@ -49,13 +50,21 @@ class StellarAsset {
       .forAccount(sourcePublicKey)
       .call()
 
+    let wat = false
     const amount = await txs.records.reduce(async (acc, tx) => {
       const { memo } = tx
-
-      if (memo && !(memo === url)) {
-        return acc
-      }
       const accumulator = (await acc) || 0
+
+      if (!memo) return accumulator
+
+      if (memo && !memo.includes(url)) {
+        return accumulator
+      }
+
+      if (!(memo === url) && memo.includes(SENT_KEYWORD)) {
+        wat = true
+      }
+
       const operations = await tx.operations()
       const [{ amount, asset_code, asset_issuer }] = operations.records
 
@@ -64,6 +73,9 @@ class StellarAsset {
       }
     }, 0)
 
+    if (wat === true) {
+      throw new Error('Bounty already redeemed')
+    }
     if (!amount) {
       throw new Error('no bounties found')
     }
@@ -86,8 +98,12 @@ class StellarAsset {
       .setTimeout(100)
       .build()
     transaction.sign(sourceKeypair)
-    const result = server.submitTransaction(transaction)
-    return result.hash
+    try {
+      const transactionResult = await server.submitTransaction(transaction)
+      return transactionResult.hash
+    } catch (e) {
+      console.log('An error has occured:' + e)
+    }
   }
 
   /**
@@ -120,10 +136,10 @@ class StellarAsset {
     const amount = await txs.records.reduce(async (acc, tx) => {
       const { memo } = tx
 
-      if ((memo && !(memo === url)) || tx.to === StellarAsset.address()) {
+      if (!(memo === url) || tx.to === StellarAsset.address()) {
         return acc
       }
-      if (memo.includes('DONE')) return acc
+      if (memo && memo.includes(SENT_KEYWORD)) return acc
 
       const accumulator = (await acc) || 0
       const operations = await tx.operations()
@@ -168,7 +184,7 @@ class StellarAsset {
       if (tx.to === StellarAsset.address()) {
         return acc
       }
-      if (memo.includes('DONE')) return acc
+      if (memo && memo.includes(SENT_KEYWORD)) return acc
 
       const accumulator = (await acc) || []
       const operations = await tx.operations()

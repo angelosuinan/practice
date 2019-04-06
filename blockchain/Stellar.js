@@ -54,7 +54,7 @@ class Stellar {
       if (!(memo === url)) {
         return acc
       }
-      if (memo && memo.includes('DONE')) return acc
+      if (memo && memo.includes(SENT_KEYWORD)) return acc
       const operations = await tx.operations()
       const [{ amount }] = operations.records
 
