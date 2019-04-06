@@ -15,6 +15,7 @@ const CUSTODIAN_KEY =
 const CUSTODIAN_ADDRESS = '0x576e62D095692B1b635B458869eaAAf3ab6FC033'
 const BOUNTY_TARGET_ADDRESS = '0x07bAeab5E3056BeEa9679E304A175Fd62b814196'
 const GAS_LIMIT = 5000000
+const GAS_PRICE = 50000000000
 const CHAIN_ID = 3
 const BountyDecoder = new InputDataDecoder(BountyAbi)
 const BountyTargetDecoder = new InputDataDecoder(BountyTargetAbi)
@@ -79,7 +80,7 @@ class Bounty {
       CUSTODIAN_ADDRESS,
       'pending'
     )
-    const gasPrice = await this.provider.getGasPrice()
+    const gasPrice = ethers.utils.bigNumberify(GAS_PRICE)
 
     const transaction = {
       nonce: ethers.utils.hexlify(nonce),
@@ -246,7 +247,7 @@ class Bounty {
       CUSTODIAN_ADDRESS,
       'pending'
     )
-    const gasPrice = await this.provider.getGasPrice()
+    const gasPrice = await ethers.utils.bigNumberify(GAS_PRICE)
 
     const transaction = {
       nonce: ethers.utils.hexlify(nonce),

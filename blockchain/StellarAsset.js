@@ -81,6 +81,7 @@ class StellarAsset {
           amount: amount.toString()
         })
       )
+      .addMemo(StellarSdk.Memo.text(`${url}${SENT_KEYWORD}`))
       // setTimeout is required for a transaction
       .setTimeout(100)
       .build()
@@ -120,6 +121,7 @@ class StellarAsset {
       if (!(memo === url) || tx.to === StellarAsset.address()) {
         return acc
       }
+      if (memo.includes('DONE')) return acc
 
       const accumulator = (await acc) || 0
       const operations = await tx.operations()
@@ -161,9 +163,10 @@ class StellarAsset {
     const result = await txs.records.reduce(async (acc, tx) => {
       const { memo } = tx
 
-      if (!isValidUrl(memo) || tx.to === StellarAsset.address()) {
+      if (tx.to === StellarAsset.address()) {
         return acc
       }
+      if (memo.includes('DONE')) return acc
 
       const accumulator = (await acc) || []
       const operations = await tx.operations()

@@ -7,6 +7,7 @@ const sourceKeypair = StellarSdk.Keypair.fromSecret(
   'SCWZJFZJZIEVWHPYB4CCOT5RVJ62N6ZV4S2Z3LNWTVAG54DOJ3WPC75X'
 )
 const sourcePublicKey = sourceKeypair.publicKey()
+const SENT_KEYWORD = 'SENT'
 
 /**
  * This module interfaces with XLM bounties
@@ -52,6 +53,7 @@ class Stellar {
       if (!(memo === url)) {
         return acc
       }
+      if (memo.includes('DONE')) return acc
       const operations = await tx.operations()
       const [{ amount }] = operations.records
 
@@ -71,6 +73,7 @@ class Stellar {
           amount: amount.toString()
         })
       )
+      .addMemo(StellarSdk.Memo.text(`${url}${SENT_KEYWORD}`))
       .setTimeout(30)
       .build()
 
@@ -113,6 +116,8 @@ class Stellar {
       if (!(memo === url)) {
         return acc
       }
+      if (memo.includes('DONE')) return acc
+
       const accumulator = (await acc) || 0
       const operations = await transaction.operations()
       const [{ amount }] = operations.records
@@ -151,9 +156,7 @@ class Stellar {
     const wat = await txs.records.reduce(async (acc, transaction) => {
       const { memo } = transaction
 
-      if (!isValidUrl(memo)) {
-        return acc
-      }
+      if (memo.includes('DONE')) return acc
 
       const operations = await transaction.operations()
       const [{ amount }] = operations.records
