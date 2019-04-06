@@ -108,6 +108,8 @@ class StellarAsset {
    */
   static async query(url, assetIssuer, assetCode) {
     isTruthy(url, 'github issue url', 'Stellar.query')
+    isTruthy(assetIssuer, 'asset issuer', 'Stellar.asset issuer')
+    isTruthy(assetCode, 'asset code', 'Stellar.query')
 
     const txs = await server
       .transactions()

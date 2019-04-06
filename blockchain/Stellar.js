@@ -39,6 +39,7 @@ class Stellar {
    * @returns {Promise<String>}
    */
   static async claimReward(url, claimAddress) {
+    isTruthy(url, 'url', 'Stellar.claimReward')
     isTruthy(claimAddress, 'claimAddress', 'Stellar.claimReward')
 
     const txs = await server
