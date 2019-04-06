@@ -117,7 +117,7 @@ class Bounty {
     isTruthy(username, 'username', 'Bounty.addUsername')
 
     const contractAddress = await this.address(url)
-
+    console.log(contractAddress)
     const encoded = abi.simpleEncode(ASSIGN_REWARD, username).toString('hex')
     const nonce = await this.provider.getTransactionCount(
       CUSTODIAN_ADDRESS,
@@ -213,7 +213,7 @@ class Bounty {
       throw new Error(`Bounty with a ${url} url does not exist`)
     }
 
-    const [{ contractAddress }] = await this.internalTransaction(tx.hash)
+    const [_, { contractAddress }] = await this.internalTransaction(tx.hash)
 
     return contractAddress
   }
