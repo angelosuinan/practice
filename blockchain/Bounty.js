@@ -13,7 +13,7 @@ const REWARD = 'reward(address)'
 const CUSTODIAN_KEY =
   '7D8D774540919154180925AAD388D1F12351C8D84A4C52A66D9B2C24111B8E0D'
 const CUSTODIAN_ADDRESS = '0x576e62D095692B1b635B458869eaAAf3ab6FC033'
-const BOUNTY_TARGET_ADDRESS = '0x07bAeab5E3056BeEa9679E304A175Fd62b814196'
+const BOUNTY_TARGET_ADDRESS = '0x7E5EF3b8fe9216f12FE884670047bc32FA55559f'
 const GAS_LIMIT = 5000000
 const GAS_PRICE = 50000000000
 const CHAIN_ID = 3
@@ -44,7 +44,7 @@ class Bounty {
   }
 
   static async normalTransactions(address) {
-    const url = `http://api-ropsten.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`
+    const url = `https://blockscout.com/eth/ropsten/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`
 
     const { data } = await axios.get(url)
 
@@ -52,7 +52,7 @@ class Bounty {
   }
 
   static async internalTransaction(hash) {
-    const url = `https://api-ropsten.etherscan.io/api?module=account&action=txlistinternal&txhash=${hash}&apikey=YourApiKeyToken`
+    const url = `https://blockscout.com/eth/ropsten/api?module=account&action=txlistinternal&txhash=${hash}&apikey=YourApiKeyToken`
 
     const { data } = await axios.get(url)
 
@@ -296,13 +296,15 @@ class Bounty {
       }
     })
 
-    const [{ contractAddress }] = await this.internalTransaction(tx.hash)
+    const [_, { contractAddress }] = await this.internalTransaction(tx.hash)
 
     const contract = new ethers.Contract(
       contractAddress,
       BountyAbi,
       this.provider
     )
+    const decoded = BountyTargetDecoder.decodeData(tx.input)
+    const { inputs } = decoded
     const username = await contract.username()
     const balanceBigNumber = await this.provider.getBalance(contractAddress)
     const balance = ethers.utils.formatEther(balanceBigNumber.toString())
@@ -311,6 +313,7 @@ class Bounty {
       address: contractAddress,
       username,
       url,
+      metadata: inputs[1],
       balance
     }
   }
@@ -329,7 +332,41 @@ class Bounty {
    * @static
    * @returns {Promise<Object>}
    */
-  static async list() {}
+  static async list() {
+    const txs = await this.normalTransactions(BOUNTY_TARGET_ADDRESS)
+
+    const tx = txs.forEach(async transaction => {
+      const { input, hash } = transaction
+      let decoded
+      try {
+        decoded = BountyTargetDecoder.decodeData(input)
+      } catch (_) {}
+      const { inputs } = decoded
+
+      if (inputs.length === 0) {
+        return
+      }
+
+      const [_, { contractAddress }] = await this.internalTransaction(hash)
+
+      const contract = new ethers.Contract(
+        contractAddress,
+        BountyAbi,
+        this.provider
+      )
+
+      const balanceBigNumber = await this.provider.getBalance(contractAddress)
+      const balance = ethers.utils.formatEther(balanceBigNumber.toString())
+
+      const obj = {
+        url: inputs[0],
+        metadata: inputs[1],
+        amount: balance
+      }
+
+      console.log(obj)
+    })
+  }
 }
 
 module.exports = Bounty

@@ -52,7 +52,7 @@ class StellarAsset {
     const amount = await txs.records.reduce(async (acc, tx) => {
       const { memo } = tx
 
-      if (!(memo === url)) {
+      if (memo && !(memo === url)) {
         return acc
       }
       const accumulator = (await acc) || 0
@@ -118,7 +118,7 @@ class StellarAsset {
     const amount = await txs.records.reduce(async (acc, tx) => {
       const { memo } = tx
 
-      if (!(memo === url) || tx.to === StellarAsset.address()) {
+      if ((memo && !(memo === url)) || tx.to === StellarAsset.address()) {
         return acc
       }
       if (memo.includes('DONE')) return acc

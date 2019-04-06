@@ -53,7 +53,7 @@ class Stellar {
       if (!(memo === url)) {
         return acc
       }
-      if (memo.includes('DONE')) return acc
+      if (memo && memo.includes('DONE')) return acc
       const operations = await tx.operations()
       const [{ amount }] = operations.records
 
@@ -116,7 +116,7 @@ class Stellar {
       if (!(memo === url)) {
         return acc
       }
-      if (memo.includes('DONE')) return acc
+      if (memo && memo.includes('DONE')) return acc
 
       const accumulator = (await acc) || 0
       const operations = await transaction.operations()
@@ -156,7 +156,7 @@ class Stellar {
     const wat = await txs.records.reduce(async (acc, transaction) => {
       const { memo } = transaction
 
-      if (memo.includes('DONE')) return acc
+      if (memo && memo.includes('DONE')) return acc
 
       const operations = await transaction.operations()
       const [{ amount }] = operations.records
