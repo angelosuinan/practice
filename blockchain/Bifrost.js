@@ -1,7 +1,7 @@
 const axios = require('axios')
 
 const BIFROST_URL = 'http://localhost:1337/api/v1/webhook'
-const CALLBACK_URL = 'http://localhost:4000/bifrost/'
+const CALLBACK_URL = 'http://localhost:3000/bifrost/'
 /**
  *
  */
