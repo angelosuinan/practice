@@ -1,92 +1,92 @@
 [
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "githubUrl",
-		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "rewardUsername",
-				"type": "string"
-			}
-		],
-		"name": "assignReward",
-		"outputs": [],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "nonpayable"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "custodian",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "username",
-		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "view"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "claimAddress",
-				"type": "address"
-			}
-		],
-		"name": "reward",
-		"outputs": [],
-		"payable": false,
-		"type": "function",
-		"stateMutability": "nonpayable"
-	},
-	{
-		"inputs": [
-			{
-				"name": "pool",
-				"type": "address"
-			},
-			{
-				"name": "url",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"type": "constructor",
-		"stateMutability": "nonpayable"
-	},
-	{
-		"payable": true,
-		"type": "fallback",
-		"stateMutability": "payable"
-	}
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "githubUrl",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "rewardUsername",
+        "type": "string"
+      }
+    ],
+    "name": "assignReward",
+    "outputs": [],
+    "payable": false,
+    "type": "function",
+    "stateMutability": "nonpayable"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "custodian",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "username",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "type": "function",
+    "stateMutability": "view"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "claimAddress",
+        "type": "address"
+      }
+    ],
+    "name": "reward",
+    "outputs": [],
+    "payable": false,
+    "type": "function",
+    "stateMutability": "nonpayable"
+  },
+  {
+    "inputs": [
+      {
+        "name": "pool",
+        "type": "address"
+      },
+      {
+        "name": "url",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "type": "constructor",
+    "stateMutability": "nonpayable"
+  },
+  {
+    "payable": true,
+    "type": "fallback",
+    "stateMutability": "payable"
+  }
 ]

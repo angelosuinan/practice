@@ -1,10 +1,9 @@
-const { Cert } = require('@0xcert/cert')
-const { schema88 } = require('@0xcert/conventions')
+const Stellar = require('./blockchain/Stellar')
+const Bounty = require('./blockchain/Bounty')
+const IOST = require('./blockchain/IOST')
+const StellarAsset = require('./blockchain/StellarAsset')
 
-const cert = new Cert({
-    schema: {
-        image_url: 'wat'
-    },
-});
-
-console.log(cert)
+exports.Stellar = Stellar
+exports.Bounty = Bounty
+exports.IOST = IOST
+exports.StellarAsset = StellarAsset
