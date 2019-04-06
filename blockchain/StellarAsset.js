@@ -135,13 +135,18 @@ class StellarAsset {
 
     const amount = await txs.records.reduce(async (acc, tx) => {
       const { memo } = tx
-
-      if (!(memo === url) || tx.to === StellarAsset.address()) {
-        return acc
-      }
-      if (memo && memo.includes(SENT_KEYWORD)) return acc
-
       const accumulator = (await acc) || 0
+
+      if (!memo) return accumulator
+
+      if (memo && !memo.includes(url)) {
+        return accumulator
+      }
+
+      if (!(memo === url) && memo.includes(SENT_KEYWORD)) {
+        wat = true
+      }
+
       const operations = await tx.operations()
       const [{ amount, asset_code, asset_issuer }] = operations.records
 
