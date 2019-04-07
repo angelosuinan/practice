@@ -61,18 +61,18 @@ class StellarAsset {
         return accumulator
       }
 
-      if (!(memo === url) && memo.includes(SENT_KEYWORD)) {
-        wat = true
-      }
-
       const operations = await tx.operations()
       const [{ amount, asset_code, asset_issuer }] = operations.records
 
       if (asset_code === assetCode && asset_issuer === assetIssuer) {
+        if (!(memo === url) && memo.includes(SENT_KEYWORD)) {
+          wat = true
+        }
         return parseFloat(amount) + accumulator
       }
     }, 0)
-
+    console.log(amount)
+    throw new Error('how')
     if (wat === true) {
       throw new Error('Bounty already redeemed')
     }
@@ -148,7 +148,6 @@ class StellarAsset {
       const [{ amount, asset_code, asset_issuer }] = operations.records
 
       if (asset_code === assetCode && asset_issuer === assetIssuer) {
-        console.log(memo)
         if (!(memo === url) && memo.includes(SENT_KEYWORD)) {
           wat = true
         }
