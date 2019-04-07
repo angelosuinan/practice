@@ -133,7 +133,8 @@ class StellarAsset {
       .forAccount(sourcePublicKey)
       .call()
 
-    const amount = await txs.records.reduce(async (acc, tx) => {
+    let wat = false
+    let amount = await txs.records.reduce(async (acc, tx) => {
       const { memo } = tx
       const accumulator = (await acc) || 0
 
@@ -155,6 +156,9 @@ class StellarAsset {
       }
     }, 0)
 
+    if (wat === true) {
+      amount = 0
+    }
     return {
       url,
       amount

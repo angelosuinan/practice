@@ -111,20 +111,31 @@ class Stellar {
       .forAccount(sourcePublicKey)
       .call()
 
+    let wat = false
     const amount = await txs.records.reduce(async (acc, transaction) => {
       const { memo } = transaction
 
-      if (!(memo === url)) {
-        return acc
-      }
-      if (memo && memo.includes('DONE')) return acc
-
       const accumulator = (await acc) || 0
+
+      if (!memo) return accumulator
+
+      if (!(memo === url)) {
+        return accumulator
+      }
+
+      if (!(memo === url) && memo.includes(SENT_KEYWORD)) {
+        wat = true
+      }
+
       const operations = await transaction.operations()
       const [{ amount }] = operations.records
 
       return parseFloat(amount) + accumulator
     }, 0)
+
+    if (wat === true) {
+      amount = 0
+    }
 
     return {
       url,
@@ -157,7 +168,7 @@ class Stellar {
     const wat = await txs.records.reduce(async (acc, transaction) => {
       const { memo } = transaction
 
-      if (memo && memo.includes('DONE')) return acc
+      if (memo && memo.includes(SENT_KEYWORD)) return acc
 
       const operations = await transaction.operations()
       const [{ amount }] = operations.records

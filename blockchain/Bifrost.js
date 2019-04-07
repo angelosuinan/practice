@@ -35,7 +35,6 @@ class Bifrost {
       )
       return true
     } catch (e) {
-      console.log(e.response.data)
       console.log('something went wrong' + e)
     }
   }
