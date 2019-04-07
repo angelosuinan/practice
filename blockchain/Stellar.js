@@ -112,14 +112,12 @@ class Stellar {
       .call()
 
     let wat = false
-    const amount = await txs.records.reduce(async (acc, transaction) => {
+    let amount = await txs.records.reduce(async (acc, transaction) => {
       const { memo } = transaction
 
       const accumulator = (await acc) || 0
 
-      if (!memo) return accumulator
-
-      if (!(memo === url)) {
+      if (!memo || !(memo === url) || !memo.includes(SENT_KEYWORD)) {
         return accumulator
       }
 
