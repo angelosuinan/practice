@@ -71,8 +71,7 @@ class StellarAsset {
         return parseFloat(amount) + accumulator
       }
     }, 0)
-    console.log(amount)
-    throw new Error('how')
+
     if (wat === true) {
       throw new Error('Bounty already redeemed')
     }
